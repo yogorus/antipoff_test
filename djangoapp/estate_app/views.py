@@ -22,7 +22,7 @@ class QueryView(CreateAPIView):
 
             # Send request to external API
             response: dict = requests.post(
-                "http://127.0.0.1:8080/", json.dumps(data)
+                "http://external_api:80/", json.dumps(data)
             ).json()
 
             status = response.get("status")
@@ -47,7 +47,9 @@ class CadastralHistoryView(ListAPIView):
 
     def get_queryset(self):
         cadastral_number = self.kwargs["cadastral_number"]
-        return CadastralRequest.objects.filter(cadastral_number=cadastral_number)
+        return CadastralRequest.objects.filter(
+            cadastral_number=cadastral_number
+        ).order_by("-date")
 
 
 class PingView(APIView):

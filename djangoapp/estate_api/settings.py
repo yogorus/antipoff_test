@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-3m+ug3)&jm6qt8t6#qqrr0dy@c(epxb^nhjbm6q8dxh+*&t+7d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "estate_app",
+    "django.contrib.postgres",
 ]
 
 MIDDLEWARE = [
@@ -77,8 +78,12 @@ WSGI_APPLICATION = "estate_api.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",  # Используется PostgreSQL
+        "NAME": "db",  # Имя базы данных
+        "USER": "postgres",  # Имя пользователя
+        "PASSWORD": "postgres",  # Пароль пользователя
+        "HOST": "db",  # Наименование контейнера для базы данных в Docker Compose
+        "PORT": "5432",  # Порт базы данных
     }
 }
 

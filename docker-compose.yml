@@ -1,0 +1,73 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:15.1-alpine
+    container_name: db
+    environment:
+      POSTGRES_DB: "db"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      PGUSER: "postgres"
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-U", "user", "-d", "db"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+      start_period: 80s
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    expose:
+      - 5432
+    ports:
+      - "5432:5432"
+    networks:
+      - cadastral_network
+
+  djangoapp:
+    build:
+      context: ./djangoapp
+      dockerfile: Dockerfile
+
+    volumes:
+      - ./djangoapp:/djangoapp
+
+    entrypoint: >
+      sh -c "
+        python manage.py migrate &&
+        python manage.py runserver 0.0.0.0:8000
+        "
+
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - external_api
+
+    networks:
+      - cadastral_network
+
+  external_api:
+    container_name: external_api
+    build:
+      context: ./external_api
+      dockerfile: Dockerfile
+
+    volumes:
+      - ./external_api:/external_app
+
+    entrypoint: >
+      sh -c "
+        uvicorn main:app --host 0.0.0.0 --port 80 --reload
+      "
+    ports:
+      - "80:80"
+    networks:
+      - cadastral_network
+
+networks:
+  cadastral_network:
+    name: cadastral_network
+volumes:
+  postgres_data:
