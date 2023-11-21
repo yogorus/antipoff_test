@@ -18,7 +18,6 @@ class CadastralInputSerializer(serializers.Serializer):
 
     class Meta:
         model = CadastralRequest
-        # fields = ["cadastral_number", "latitude", "longitude"]
         fields = "__all__"
 
     def validate(self, data):
@@ -44,9 +43,6 @@ class CadastralInputSerializer(serializers.Serializer):
             raise ValidationError("Invalid latitude or longitude")
 
         return data
-
-    def create(self, data):
-        pass
 
 
 class CadastralResultSerializer(serializers.ModelSerializer):
