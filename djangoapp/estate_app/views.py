@@ -34,7 +34,7 @@ class QueryView(CreateAPIView):
 
             return redirect("result", pk=result_serializer.instance.pk)
 
-        return Response({"message": input_serializer.errors})
+        return Response({"message": input_serializer.errors}, status=422)
 
 
 class ResultView(RetrieveAPIView):
