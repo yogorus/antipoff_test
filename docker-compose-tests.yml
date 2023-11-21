@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  api_test:
+    container_name: api_test
+
+    build:
+      context: ./djangoapp
+      dockerfile: Dockerfile
+
+    volumes:
+      - ./djangoapp:/djangoapp
+
+    entrypoint: >
+      sh -c "
+        pytest
+      "
+    networks:
+      - cadastral_network
+
+networks:
+  cadastral_network:
+    name: cadastral_network
