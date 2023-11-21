@@ -26,6 +26,7 @@ services:
       - cadastral_network
 
   djangoapp:
+    container_name: djangoapp
     build:
       context: ./djangoapp
       dockerfile: Dockerfile
